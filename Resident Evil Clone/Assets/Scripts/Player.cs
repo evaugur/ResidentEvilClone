@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     [SerializeField] Transform fpsCamera;
     private Rigidbody rb;
 
+    [SerializeField] private Transform firePoint;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +33,10 @@ public class Player : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             Jump();
+        }
+        if (Input.GetMouseButtonDown(0))
+        {
+            Shoot();
         }
     }
 
@@ -83,4 +89,15 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void Shoot()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(firePoint.position, firePoint.forward, out hit, 100))
+        {
+            if (hit.transform.CompareTag("Zombie"))
+            {
+                hit.transform.GetComponent<Enemy>().TakeDamage(1);
+            }
+        }
+    }
 }
