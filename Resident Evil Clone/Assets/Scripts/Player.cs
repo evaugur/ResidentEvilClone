@@ -16,8 +16,6 @@ public class Player : MonoBehaviour
     [SerializeField] Transform fpsCamera;
     private Rigidbody rb;
 
-    [SerializeField] private Transform firePoint;
-
     float currentHealth = 5f;
 
     // Start is called before the first frame update
@@ -37,10 +35,6 @@ public class Player : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             Jump();
-        }
-        if (Input.GetMouseButtonDown(0))
-        {
-            Shoot();
         }
     }
 
@@ -89,7 +83,7 @@ public class Player : MonoBehaviour
             currentHealth -= 1;
             if (currentHealth <= 0)
             {
-                GameManager.InitiateGameOver();
+                GameManager.instance.InitiateGameOver();
             }
         }
     }
@@ -99,18 +93,6 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Ground")
         {
             isGrounded = false;
-        }
-    }
-
-    private void Shoot()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(firePoint.position, firePoint.forward, out hit, 100))
-        {
-            if (hit.transform.CompareTag("Zombie"))
-            {
-                hit.transform.GetComponent<Enemy>().TakeDamage(1);
-            }
         }
     }
 }

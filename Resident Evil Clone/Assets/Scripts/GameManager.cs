@@ -7,9 +7,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    float isGameOver = false;
+    bool isGameOver = false;
 
-    [SerializeField] GameObject gameOverText;
+    public GameObject gameOverText;
 
     private void Awake()
     {
@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void InitiateGameOver()
+    public void InitiateGameOver()
     {
         isGameOver = true;
         gameOverText.SetActive(true);
