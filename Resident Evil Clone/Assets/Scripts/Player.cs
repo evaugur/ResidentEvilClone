@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -18,6 +19,11 @@ public class Player : MonoBehaviour
 
     float currentHealth = 5f;
 
+    public Weapon currentWeapon;
+    private List<IPickupable> inventory = new List<IPickupable>();
+
+    public TextMeshProUGUI ammo;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +41,15 @@ public class Player : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             Jump();
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            currentWeapon.Fire();
+        }
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            AttemptReload();
         }
     }
 
@@ -71,13 +86,34 @@ public class Player : MonoBehaviour
         isGrounded = false;
     }
 
+    private void AttemptReload()
+    {
+        if (currentWeapon != null)
+        {
+            Enums.MagazineType gunMagType = currentWeapon.magazineType;
+            foreach (Magazine item in inventory)
+            {
+                Magazine mag = item;
+                if (item.GetMagType() == gunMagType)
+                {
+                    currentWeapon.Reload(item);
+                    inventory.Remove(item);
+                }
+            }
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.tag == "Ground")
         {
             isGrounded = true;
         }
-
+        if (collision.gameObject.GetComponent<IPickupable>() != null)
+        {
+            inventory.Add(collision.gameObject.GetComponent<IPickupable>());
+            collision.gameObject.GetComponent<IPickupable>().Pickup(this);
+        }
         if(collision.gameObject.tag == "Zombie")
         {
             currentHealth -= 1;

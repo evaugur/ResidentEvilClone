@@ -20,23 +20,15 @@ public class Pistol : Weapon
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Fire();
-        }
-        if (Input.GetMouseButtonDown(1))
-        {
-            Reload();
-        }
     }
 
-    protected override void Fire()
+    public override void Fire()
     {
         base.Fire();
     }
 
-    protected override void Reload()
+    public override void Reload(Magazine newMag)
     {
-        base.Reload();
+        base.Reload(newMag);
     }
 }
